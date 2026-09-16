@@ -42,7 +42,8 @@ namespace to_do_list.src.Repository
                         {"_id", 0},
                         {"id", new BsonDocument("$toString", "$_id")},
                         {"name", 1},
-                        {"code", 1}
+                        {"code", 1},
+                        {"active", 1}
                     }),
                     new("$sort", pagination.PipelineSort),
                 };
@@ -70,7 +71,8 @@ namespace to_do_list.src.Repository
                         {"_id", 0},
                         {"id", new BsonDocument("$toString", "$_id")},
                         {"name", 1},
-                        {"code", 1}
+                        {"code", 1},
+                        {"active", 1}
                     }),
                     new("$sort", pagination.PipelineSort),
                 };

@@ -57,8 +57,8 @@ namespace to_do_list.src.Controllers
             return StatusCode(response.StatusCode, response.Result);
         }
         
-        [Authorize]
         [HttpPut("confirm-account")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateConfirmAccount([FromBody] UpdateConfirmAccountDTO user)
         {
             if (user == null) return BadRequest("Dados inválidos.");

@@ -63,7 +63,8 @@ namespace to_do_list.src.Services
                 to_do_list.src.Models.Category category = new()
                 {
                     Name = request.Name,
-                    Code = code.ToString()!.PadLeft(6, '0')
+                    Code = code.ToString()!.PadLeft(6, '0'),
+                    CreatedBy = request.CreatedBy
                 };
 
                 ResponseApi<to_do_list.src.Models.Category?> response = await repository.CreateAsync(category);

@@ -60,7 +60,8 @@ namespace to_do_list.src.Services
                     EndDate = request.EndDate,
                     Priority = request.Priority.ToUpper(),
                     Status = "PENDENTE",
-                    CategoryId = request.CategoryId
+                    CategoryId = request.CategoryId,
+                    CreatedBy = request.CreatedBy
                 };
 
                 ResponseApi<to_do_list.src.Models.Task?> response = await repository.CreateAsync(task);

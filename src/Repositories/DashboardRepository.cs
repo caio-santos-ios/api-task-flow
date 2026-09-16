@@ -17,13 +17,15 @@ namespace to_do_list.src.Repository
                 long doing = await context.Tasks.Find(x => x.CreatedBy == userId && !x.Deleted && x.Status == "PENDENTE").CountDocumentsAsync();
                 long late = await context.Tasks.Find(x => x.CreatedBy == userId && !x.Deleted && x.Status == "PENDENTE" && x.EndDate.Date < date.Date).CountDocumentsAsync();
                 long finish = await context.Tasks.Find(x => x.CreatedBy == userId && !x.Deleted && x.Status == "FINALIZADO").CountDocumentsAsync();
+                long notifications = await context.Notifications.Find(x => x.SendBy == userId && !x.Read).CountDocumentsAsync();
 
                 dynamic data = new
                 {
                     today,
                     doing,
                     late,
-                    finish
+                    finish,
+                    notifications
                 };
 
                 return new(data);

@@ -22,7 +22,7 @@ namespace to_do_list.src.Services
             try
             {
                 ResponseApi<User?> response = await userRepository.GetByEmailAsync(request.Email);
-                if (response.Data is null) return new(null, 400, "Falha ao fazer login");
+                if (response.Data is null) return new(null, 400, "E-mail ou senha são incorretos");
 
                 if (response.Data.Blocked) return new(null, 400, "Conta bloqueada, entre em contato com o Administrador do TaskFlow");
                 
@@ -103,9 +103,9 @@ namespace to_do_list.src.Services
         #endregion
         public string GenerateJwtToken(User user, bool refresh = false)
         {
-            string? SecretKey = Environment.GetEnvironmentVariable("SECRET_KEY") ?? "";
-            string? Issuer = Environment.GetEnvironmentVariable("ISSUER") ?? "";
-            string? Audience = Environment.GetEnvironmentVariable("AUDIENCE") ?? "";
+            string SecretKey = Environment.GetEnvironmentVariable("SECRET_KEY") ?? "";
+            string Issuer = Environment.GetEnvironmentVariable("ISSUER") ?? "";
+            string Audience = Environment.GetEnvironmentVariable("AUDIENCE") ?? "";
 
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(SecretKey));
 
