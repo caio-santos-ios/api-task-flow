@@ -85,7 +85,7 @@ namespace to_do_list.src.Services
 
                 DateTime today = DateTime.Now;
 
-                if(response.Data.CodeAccessExpiration > today) return new(null, 400, "Código expirou, deve solicitar outro");
+                if(today > response.Data.CodeAccessExpiration) return new(null, 400, "Código expirou, deve solicitar outro");
 
                 dynamic generateCode = Util.GenerateCodeAccess();
 
