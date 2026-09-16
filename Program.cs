@@ -1,6 +1,8 @@
 using to_do_list.src.Configuration;
 using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using to_do_list.src.Models.Base;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +71,25 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        List<string> errors = context.ModelState
+            .Where(e => e.Value?.Errors.Count > 0)
+            .SelectMany(e => e.Value!.Errors.Select(err => err.ErrorMessage))
+            .ToList();
+
+        ResponseApi<dynamic> response = new ()
+        {
+            Message = errors[0],
+            StatusCode = 400,
+        };
+
+        return new BadRequestObjectResult(response);
+    };
 });
 
 var allowedOrigins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS") ?? "http://localhost:3000").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
