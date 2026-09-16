@@ -58,7 +58,7 @@ namespace to_do_list.src.Services
             try
             {
                 ResponseApi<User?> response = await userRepository.GetByEmailAsync(request.Email);
-                if (response.Data is null) return new(null, 400, response.Message);
+                if (response.Data is null) return new(null, 400, "E-mail inválido");
 
                 dynamic generateCode = Util.GenerateCodeAccess();
 
