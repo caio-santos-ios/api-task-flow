@@ -59,7 +59,7 @@ namespace to_do_list.src.Services
         {
             try
             {
-                long code = await repository.GetNextCode();
+                long code = await repository.GetNextCode(request.CreatedBy);
                 to_do_list.src.Models.Category category = new()
                 {
                     Name = request.Name,

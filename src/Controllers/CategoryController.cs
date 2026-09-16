@@ -12,16 +12,16 @@ namespace to_do_list.src.Controllers
     [ApiController]
     public class CategoryController(ICategoryService service) : ControllerBase
     {
+        private string UserId => User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(UserId))
             {
                 Dictionary<string, StringValues> query = new(Request.Query);
-                query["createdBy"] = userId;
+                query["createdBy"] = UserId;
                 Request.Query = new QueryCollection(query);
             }
             ResponseApi<PaginationApi<List<dynamic>>> response = await service.GetAllAsync(new(Request.Query));
@@ -32,12 +32,10 @@ namespace to_do_list.src.Controllers
         [HttpGet("select")]
         public async Task<IActionResult> GetSelect()
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(UserId))
             {
                 Dictionary<string, StringValues> query = new(Request.Query);
-                query["createdBy"] = userId;
+                query["createdBy"] = UserId;
                 Request.Query = new QueryCollection(query);
             }
             ResponseApi<List<dynamic>> response = await service.GetSelectAsync(new(Request.Query));
@@ -57,7 +55,7 @@ namespace to_do_list.src.Controllers
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest task)
         {
             if (task == null) return BadRequest("Dados inválidos.");
-            task.CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+            task.CreatedBy = UserId;
             ResponseApi<to_do_list.src.Models.Category?> response = await service.CreateAsync(task);
             return StatusCode(response.StatusCode, response.Result);
         }
@@ -67,7 +65,7 @@ namespace to_do_list.src.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest task)
         {
             if (task == null) return BadRequest("Dados inválidos.");
-            task.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+            task.UpdatedBy = UserId;
             ResponseApi<to_do_list.src.Models.Category?> response = await service.UpdateAsync(task);
             return StatusCode(response.StatusCode, response.Result);
         }
@@ -76,8 +74,7 @@ namespace to_do_list.src.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            ResponseApi<to_do_list.src.Models.Category> response = await service.DeleteAsync(new() { Id = id, DeletedBy = userId! });
+            ResponseApi<to_do_list.src.Models.Category> response = await service.DeleteAsync(new() { Id = id, DeletedBy = UserId });
             return StatusCode(response.StatusCode, response.Result);
         }
     }

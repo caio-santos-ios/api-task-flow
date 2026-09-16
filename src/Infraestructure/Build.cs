@@ -42,7 +42,7 @@ namespace to_do_list.src.Configuration
 
         public static void AddBuilderHelpers(this WebApplicationBuilder builder)
         {
-            builder.Services.AddTransient<MailHelper>();
+            builder.Services.AddHttpClient<MailHelper>();
             builder.Services.AddTransient<UploadHelper>();
         }
 

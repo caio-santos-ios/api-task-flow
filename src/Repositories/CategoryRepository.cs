@@ -124,9 +124,9 @@ namespace to_do_list.src.Repository
                 return new(null, 500, "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde.");
             }
         }
-        public async Task<long> GetNextCode()
+        public async Task<long> GetNextCode(string userId)
         {
-            return await context.Categories.Find(x => true).CountDocumentsAsync() + 1;
+            return await context.Categories.Find(x => x.CreatedBy == userId).CountDocumentsAsync() + 1;
         }
         public async Task<int> GetCountDocumentsAsync(PaginationUtil<to_do_list.src.Models.Category> pagination)
         {
